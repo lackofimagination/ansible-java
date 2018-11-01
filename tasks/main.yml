@@ -1,0 +1,25 @@
+---
+- name: install apt key dependencies
+  apt:
+    pkg:
+      - ca-certificates
+    state: present
+
+- name: add java repo
+  apt_repository:
+    repo: 'ppa:webupd8team/java'
+
+- name: accept oracle license
+  debconf:
+    name: oracle-java8-installer
+    question: 'shared/accepted-oracle-license-v1-1'
+    value: 'true'
+    vtype: select
+
+- name: install java
+  apt:
+    name: oracle-java8-installer
+    update_cache: true
+    cache_valid_time: 86400
+    state: latest
+    install_recommends: false
